@@ -1,15 +1,10 @@
-export async function stdinAsNumberPairStream(): Promise<
-  ReadableStream<Array<number>>
-> {
+export function stdinAsNumberPairStream(): ReadableStream<Array<number>> {
   return Deno.stdin.readable
     .pipeThrough(new TextDecoderStream())
     .pipeThrough(textToNumberPairStream());
 }
 
-function textToNumberPairStream(): TransformStream<
-  string,
-  Array<number>
-> {
+function textToNumberPairStream(): TransformStream<string, Array<number>> {
   return new TransformStream({
     transform(chunk: string, controller) {
       // Assumption: chunk will always be one or more complete lines, assuming reasonably short lines

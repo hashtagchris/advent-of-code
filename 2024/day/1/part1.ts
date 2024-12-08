@@ -1,11 +1,9 @@
 import { stdinAsNumberPairStream } from "./streams.ts";
 
-const numbersStream = await stdinAsNumberPairStream();
-
 const left: Array<number> = [];
 const right: Array<number> = [];
 
-for await (const numbers of numbersStream) {
+for await (const numbers of stdinAsNumberPairStream()) {
   if (numbers.length != 2) {
     throw new Error(
       `Expected a pair of numbers, not ${numbers.length}: ${numbers}`,
