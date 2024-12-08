@@ -1,17 +1,3 @@
-export async function readAsNumberPairStream(
-  path: string,
-): Promise<ReadableStream<Array<number>>> {
-  const response = await fetch(path);
-
-  if (!response.body) {
-    throw new Error("no response body");
-  }
-
-  return response.body
-    .pipeThrough(new TextDecoderStream())
-    .pipeThrough(textToNumberPairStream());
-}
-
 export async function stdinAsNumberPairStream(): Promise<
   ReadableStream<Array<number>>
 > {
@@ -20,7 +6,7 @@ export async function stdinAsNumberPairStream(): Promise<
     .pipeThrough(textToNumberPairStream());
 }
 
-export function textToNumberPairStream(): TransformStream<
+function textToNumberPairStream(): TransformStream<
   string,
   Array<number>
 > {
