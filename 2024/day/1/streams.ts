@@ -6,7 +6,7 @@ export function stdinAsNumberPairStream(): ReadableStream<Array<number>> {
 
 function textToNumberPairStream(): TransformStream<string, Array<number>> {
   return new TransformStream({
-    transform(chunk: string, controller) {
+    transform(chunk, controller) {
       // Assumption: chunk will always be one or more complete lines, assuming reasonably short lines
       // console.log(`chunk: ${chunk}`);
 
