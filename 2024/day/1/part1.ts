@@ -23,3 +23,13 @@ for (let i = 0; i < left.length; i++) {
 }
 
 console.log(totalDistance);
+
+// Functional alternative, with some array logging:
+
+// const distances = right.map((v, i) => Math.abs(left[i] - right[i]));
+// const totalDistance = distances.reduce((acc, v) => acc + v);
+
+// console.log(left);
+// console.log(right);
+// console.log(distances);
+// console.log(totalDistance);
