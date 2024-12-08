@@ -2,18 +2,23 @@ import { stdinAsNumbersStream } from "./streams.ts";
 
 let safeReports = 0;
 for await (const report of stdinAsNumbersStream()) {
-  if (safeReport(report, 1)) {
+  const r = safeReport(report, 1);
+  console.log(`${report} => ${r}`);
+  if (r) {
     safeReports++;
   }
 }
 console.log(safeReports);
 
-function safeReport(report: number[], remainingRemovals: number): boolean {
-  // check for steadily increasing, then decreasing
+function safeReport(
+  report: number[],
+  remainingRemovals: number,
+): number[] | undefined {
+  // check first for steadily increasing, then decreasing
   for (const increasing of [true, false]) {
     for (let i = 1; i <= report.length; i++) {
       if (i === report.length) {
-        return true;
+        return report;
       }
 
       const delta = increasing
@@ -22,18 +27,21 @@ function safeReport(report: number[], remainingRemovals: number): boolean {
 
       if (delta < 1 || delta > 3) {
         if (remainingRemovals) {
-          // Note: We might be removing an element unnecessarily, in the case of steadily decreasing numbers.
-          // Example: 7,6,4,2,1 => 6,4,2,1
-          const revisedReport = report.toSpliced(i - 1, 1);
-          if (safeReport(revisedReport, remainingRemovals - 1)) {
-            // console.log(`Dampener: ${report} => ${revisedReport}`)
-            return true;
+          // Note: In the case of steadily decreasing numbers, we're removing an element unnecessarily here.
+          // Example: 6,5,4,3,2,1 => 5,4,3,2,1
+
+          // try removing the element at the previous index
+          let revisedReport = report.toSpliced(i - 1, 1);
+          let result = safeReport(revisedReport, remainingRemovals - 1);
+          if (result) {
+            return result;
           }
 
-          const revisedReport2 = report.toSpliced(i, 1);
-          if (safeReport(revisedReport2, remainingRemovals - 1)) {
-            // console.log(`Dampener: ${report} => ${revisedReport2}`)
-            return true;
+          // try removing the element at the current index
+          revisedReport = report.toSpliced(i, 1);
+          result = safeReport(revisedReport, remainingRemovals - 1);
+          if (result) {
+            return result;
           }
         }
         break;
@@ -41,5 +49,5 @@ function safeReport(report: number[], remainingRemovals: number): boolean {
     }
   }
 
-  return false;
+  return undefined;
 }
