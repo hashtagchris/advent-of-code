@@ -1,0 +1,8 @@
+{
+  "tasks": {
+    "part1": "deno --allow-read main1.ts input.dat",
+    "part2": "deno --allow-read main2.ts input.dat",
+    // verify we're ready to commit our changes
+    "verify": "deno fmt --check && deno lint && deno check . && deno test"
+  }
+}
