@@ -1,10 +1,10 @@
 export function evaluate(mapText: string): number {
   // convert the text to a 2D array of integers.
-  const map: number[][] = mapText.split(/\n/g)
+  const map: number[][] = mapText.split(/\n/u)
     // ignore blank lines
     .filter(Boolean)
     // Another option for parsing the string's Unicode code points: [...line].map((v) => parseInt(v))
-    .map((line) => line.split(/\s?/).map((v) => parseInt(v)));
+    .map((line) => line.split(/\s?/u).map((v) => parseInt(v)));
 
   let totalScore = 0;
   for (let r = 0; r < map.length; r++) {
