@@ -15,7 +15,7 @@ export function evaluate(mapText: string): number {
       const count: number = stoneMap[stoneVal];
 
       if (stoneVal === 0) {
-        incrementCount(newStoneMap, 1, count);
+        increment(newStoneMap, 1, count);
       } else if (stoneValText.length % 2 === 0) {
         const keys: number[] = [
           parseInt(stoneValText.slice(0, stoneValText.length / 2)),
@@ -25,11 +25,11 @@ export function evaluate(mapText: string): number {
         ];
 
         for (const key of keys) {
-          incrementCount(newStoneMap, key, count);
+          increment(newStoneMap, key, count);
         }
       } else {
         const key = stoneVal * 2024;
-        incrementCount(newStoneMap, key, count);
+        increment(newStoneMap, key, count);
       }
     }
     stoneMap = newStoneMap;
@@ -51,13 +51,10 @@ export function evaluate(mapText: string): number {
   return totalCount;
 }
 
-function incrementCount(
+function increment(
   map: { [key: number]: number },
   key: number,
   val: number,
 ) {
-  if (map[key] === undefined) {
-    map[key] = 0;
-  }
-  map[key] += val;
+  map[key] = (map[key] ?? 0) + val;
 }
