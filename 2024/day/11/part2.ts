@@ -33,21 +33,13 @@ export function evaluate(mapText: string): number {
       }
     }
     stoneMap = newStoneMap;
-
-    let totalCount = 0;
-    for (const count of Object.values(stoneMap)) {
-      totalCount += count;
-    }
+    const totalCount = Object.values(stoneMap).reduce((p, c) => p + c);
 
     console.log(`${i}: ${totalCount}, ${JSON.stringify(stoneMap)}`);
     // console.log(`${stones.length} stones: ${stones}`);
   }
 
-  let totalCount = 0;
-  for (const count of Object.values(stoneMap)) {
-    totalCount += count;
-  }
-
+  const totalCount = Object.values(stoneMap).reduce((p, c) => p + c);
   return totalCount;
 }
 
