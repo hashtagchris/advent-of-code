@@ -1,39 +1,34 @@
 export function evaluate(mapText: string): number {
   // convert the text to a 2D array of integers.
-  // let stones: number[] = mapText.split(/\s+/u).map((v) => parseInt(v));
+  const stones: number[] = mapText.split(/\s+/u).map((v) => parseInt(v));
 
-  let stoneMap: { [key: string]: number } = {
-    "3": 1,
-    "386358": 1,
-    "86195": 1,
-    "85": 1,
-    "1267": 1,
-    "3752457": 1,
-    "0": 1,
-    "741": 1,
-  };
+  // Actually { [key: string]: number }, but JavaScript coerces keys to strings.
+  let stoneMap: { [key: number]: number } = {};
+  for (const stone of stones) {
+    stoneMap[stone] = 1;
+  }
 
   for (let i = 0; i < 75; i++) {
     const newStoneMap = {};
     for (const stoneValText of Object.keys(stoneMap)) {
-      const count: number = stoneMap[stoneValText];
       const stoneVal = parseInt(stoneValText);
+      const count: number = stoneMap[stoneVal];
 
-      if (stoneValText === "0") {
-        incrementCount(newStoneMap, "1", count);
+      if (stoneVal === 0) {
+        incrementCount(newStoneMap, 1, count);
       } else if (stoneValText.length % 2 === 0) {
-        const keys: string[] = [
-          parseInt(stoneValText.slice(0, stoneValText.length / 2)).toString(),
+        const keys: number[] = [
+          parseInt(stoneValText.slice(0, stoneValText.length / 2)),
           parseInt(
             stoneValText.slice(stoneValText.length / 2, stoneValText.length),
-          ).toString(),
+          ),
         ];
 
         for (const key of keys) {
           incrementCount(newStoneMap, key, count);
         }
       } else {
-        const key = (stoneVal * 2024).toString();
+        const key = stoneVal * 2024;
         incrementCount(newStoneMap, key, count);
       }
     }
@@ -57,8 +52,8 @@ export function evaluate(mapText: string): number {
 }
 
 function incrementCount(
-  map: { [key: string]: number },
-  key: string,
+  map: { [key: number]: number },
+  key: number,
   val: number,
 ) {
   if (map[key] === undefined) {
