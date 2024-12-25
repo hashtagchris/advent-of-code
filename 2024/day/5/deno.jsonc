@@ -1,0 +1,12 @@
+{
+  "tasks": {
+    "d1": "deno --allow-read --inspect-wait main1.ts example.dat",
+    "d2": "deno --allow-read --inspect-wait main2.ts example.dat",
+    "e1": "deno --allow-read main1.ts example.dat",
+    "e2": "deno --allow-read main2.ts example.dat",
+    "i1": "deno --allow-read main1.ts input.dat",
+    "i2": "deno --allow-read main2.ts input.dat",
+    // verify we're ready to commit our changes
+    "verify": "deno fmt --check && deno lint && deno check . && deno test"
+  }
+}
