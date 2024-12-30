@@ -1,3 +1,7 @@
+const LESS_THAN = -1;
+const GREATER_THAN = 1;
+const EQUAL = 0;
+
 export function evaluate(input: string): number {
   const lines = input.split(/\n/u).map((line) => line.trim());
 
@@ -10,13 +14,14 @@ export function evaluate(input: string): number {
   const orderMap: { [key: string]: { [key: string]: number } } = {};
 
   for (const orderPair of firstLines.map((line) => line.split("|"))) {
-    orderMap[orderPair[0]] ||= {};
-    orderMap[orderPair[1]] ||= {};
-
     // the first page comes before the second page. Given 43|66, our compare function
-    // should return -1 for (43, 66), and 1 for (66, 43).
-    orderMap[orderPair[0]][orderPair[1]] = -1;
-    orderMap[orderPair[1]][orderPair[0]] = 1;
+    // should return LESS_THAN for (43, 66).
+    orderMap[orderPair[0]] ||= {};
+    orderMap[orderPair[0]][orderPair[1]] = LESS_THAN;
+
+    // Optional: Set up GREATER_THAN for the reverse order (66, 43).
+    orderMap[orderPair[1]] ||= {};
+    orderMap[orderPair[1]][orderPair[0]] = GREATER_THAN;
   }
 
   const updates = secondLines.map((line) => {
@@ -29,7 +34,9 @@ export function evaluate(input: string): number {
 
   for (const update of updates) {
     // sort the update's pages using the order map
-    update.sortedPages = update.pages.toSorted((a, b) => orderMap[a]?.[b] || 0);
+    update.sortedPages = update.pages.toSorted((a, b) =>
+      orderMap[a]?.[b] || EQUAL
+    );
 
     // if any pages were reordered, set validInitially to false
     update.validInitially = update.sortedPages.every((v, i) =>
