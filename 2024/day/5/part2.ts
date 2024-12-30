@@ -34,8 +34,9 @@ export function evaluate(input: string): number {
 
   for (const update of updates) {
     // sort the update's pages using the order map
+    // I'm using EQUAL to keep the page order intact when there's no relevant ordering directive
     update.sortedPages = update.pages.toSorted((a, b) =>
-      orderMap[a]?.[b] || EQUAL
+      orderMap[a]?.[b] ?? EQUAL
     );
 
     // if any pages were reordered, set validInitially to false
